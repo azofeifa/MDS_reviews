@@ -9,15 +9,15 @@ def iterate(root):
     for f in os.listdir(root):
         if ".bed" == f[-4:]:
             if f[:-4] in meta.index:
-                m  = meta.loc[f[:-4]]["Experiment target"]
-                
+                m  = meta.loc[f[:-4]]
+                m  = m["Experiment target"].split("-")[0]+"_"+ m["Biosample term name"]
                 df = pd.read_csv(root+f,sep="\t",header=None)
                 avg = np.average(df[2]-df[1])
                 FHW.write(m+","+str(avg) + "," + f[:-4]+"\n")
                 FHW.flush()
 
 def main():
-    root="../chromatin_marks/"
+    root="../../chromatin_marks/"
     iterate(root)
 
 main()
