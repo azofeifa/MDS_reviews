@@ -1,0 +1,60 @@
+#!/bin/bash
+human=false
+mouse=false
+other=true
+
+qsub_template=/scratch/Shares/dowell/md_score_paper/useful_qsub_scripts/mds.sh
+
+
+
+
+
+if [ "$human" = true  ] ; then
+fasta=/scratch/Shares/dowell/md_score_paper/support_files/hg19.fa
+DB=/scratch/Shares/dowell/md_score_paper/support_files/HOCOMOCO_human.txt
+FILES=/scratch/Shares/dowell/md_score_paper/tfit_bed_files/human/recent/
+out_dir=/scratch/Shares/dowell/md_score_paper/mdscore_tsv_files/human/recent/
+fi
+
+if [ "$mouse" = true  ] ; then
+fasta=/scratch/Shares/dowell/md_score_paper/support_files/mm10.fa
+DB=/scratch/Shares/dowell/md_score_paper/support_files/HOCOMOCO_mouse.txt
+TSS=/scratch/Shares/dowell/md_score_paper/support_files/mm10_TSS.bed
+FILES=/scratch/Shares/dowell/md_score_paper/tfit_bed_files/mouse/
+out_dir=/scratch/Shares/dowell/md_score_paper/mdscore_tsv_files/mouse/
+fi
+
+if [ "$other" = true  ] ; then
+fasta=/scratch/Shares/dowell/md_score_paper/support_files/hg19.fa
+DB=/scratch/Shares/dowell/md_score_paper/support_files/HOCOMOCO_human.txt
+FILES=/scratch/Shares/dowell/temp/dis1_225and_dis2_175/
+FILES=/scratch/Shares/dowell/ButcherRawData/tfit_bed_files/
+out_dir=/scratch/Shares/dowell/temp/dis1_225and_dis2_175/mds/
+out_dir=/scratch/Shares/dowell/ButcherRawData/mds_files/tss/
+fi
+#===============================================================
+#Mouse Data ---comment out need be---
+
+
+
+#===============================================================
+#general parameters
+
+log_out=/scratch/Shares/dowell/md_score_paper/log_files/mds/
+
+for f in $(ls ${FILES}*_TSS.bed)
+do
+
+  bed=$f
+  name=$(echo $bed | tr "/" "\n" | tail -1 | tr "-" "\n" | head -1  )    
+  
+  qsub -v DB=$DB,fasta=$fasta,bed=$bed,OUT=$out_dir,name=$name,log_out=$log_out $qsub_template -N $name
+  
+done
+
+
+
+
+
+
+
