@@ -1,0 +1,7 @@
+import pandas as pd, numpy as np
+import os, sys
+
+def run(root):
+    for FILE in os.listdir(root):
+        df = pd.read_csv(root+FILE)
+
